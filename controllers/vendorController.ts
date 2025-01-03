@@ -16,6 +16,42 @@ export const createVendor = async (req: Request, res: Response, next: NextFuncti
       }
     };  
 
+// createMultipleVendors
+export const createMultipleVendors = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const vendors = req.body; 
+      if (!Array.isArray(vendors) || vendors.length === 0) {
+        return next(new ApplicationError("Invalid or empty array of vendors provided.", 400));
+      }
+  
+      const success = [];
+      const failed = [];
+  
+      for (const vendor of vendors) {
+        try {
+          const newVendor = await Vendor.create(vendor);
+          success.push({ id: newVendor._id, name: newVendor.name, message: "Created successfully" });
+        } catch (err) {
+          failed.push({ vendor, message: (err as Error).message });
+        }
+      }
+  
+      res.status(201).json({
+        success: true,
+        results: {
+          created: success.length,
+          failed: failed.length,
+          details: {
+            success,
+            failed,
+          },
+        },
+      });
+    } catch (error) {
+      next(new ApplicationError((error as Error).message, 500));
+    }
+  };
+
 // getAllVendors
 export const getAllVendors = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -63,6 +99,51 @@ export const updateVendor = async (req: Request, res: Response, next: NextFuncti
         next(new ApplicationError((error as Error).message, 400));
       }
     };  
+
+// updateMultipleVendors
+export const updateMultipleVendors = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const updates = req.body; 
+      if (!Array.isArray(updates) || updates.length === 0) {
+        return next(new ApplicationError("Invalid or empty array of updates provided.", 400));
+      }
+  
+      const success = [];
+      const failed = [];
+  
+      for (const { id, updateData } of updates) {
+        try {
+          const updatedVendor = await Vendor.findByIdAndUpdate(id, updateData, {
+            new: true,
+            runValidators: true,
+          });
+          if (updatedVendor) {
+            success.push({ id, name: updatedVendor.name, message: "Updated successfully" });
+          } else {
+            failed.push({ id, message: "Vendor not found" });
+          }
+        } catch (err) {
+          failed.push({ id, message: (err as Error).message });
+        }
+      }
+  
+      res.status(200).json({
+        success: true,
+        results: {
+          updated: success.length,
+          failed: failed.length,
+          details: {
+            success,
+            failed,
+          },
+        },
+      });
+    } catch (error) {
+      next(new ApplicationError((error as Error).message, 500));
+    }
+  };
+
+
 // delete vendor by ID
 export const deleteVendor = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -78,3 +159,44 @@ export const deleteVendor = async (req: Request, res: Response, next: NextFuncti
         next(new ApplicationError((error as Error).message, 500));
       }
     };
+
+// deleteMultipleVendors
+export const deleteMultipleVendors = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { ids } = req.body; 
+  
+      if (!Array.isArray(ids) || ids.length === 0) {
+        return next(new ApplicationError("Invalid IDs provided.", 400));
+      }
+  
+      const success = [];
+      const failed = [];
+  
+      for (const id of ids) {
+        try {
+          const vendor = await Vendor.findByIdAndDelete(id);
+          if (vendor) {
+            success.push({ id, message: "Deleted successfully" });
+          } else {
+            failed.push({ id, message: "Vendor not found" });
+          }
+        } catch (err) {
+          failed.push({ id, message: "Invalid ID format or error during deletion" });
+        }
+      }
+  
+      res.status(200).json({
+        success: true,
+        results: {
+          deleted: success.length,
+          failed: failed.length,
+          details: {
+            success,
+            failed,
+          },
+        },
+      });
+    } catch (error) {
+      next(new ApplicationError((error as Error).message, 500));
+    }
+  };

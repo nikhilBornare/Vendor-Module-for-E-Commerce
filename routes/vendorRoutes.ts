@@ -1,11 +1,14 @@
 import express from "express";
-import { createVendor, deleteVendor, getAllVendors, getVendorById, updateVendor } from "../controllers/vendorController";
+import { createMultipleVendors, createVendor, deleteMultipleVendors, deleteVendor, getAllVendors, getVendorById, updateVendor } from "../controllers/vendorController";
 
 
 const router = express.Router();
 
 // Route to create vendor
 router.post("/" , createVendor);
+
+// Route to create multiple vendors
+router.post("/bulk",createMultipleVendors);
 
 // Route to get all vendors
 router.get("/", getAllVendors);
@@ -16,7 +19,13 @@ router.get("/:id", getVendorById);
 // Route to update a vendor by ID
 router.put("/:id",updateVendor);
 
+// Route to update multiple Vendors 
+router.put("/bulk/")
+
 // Route to delete a vendor by ID
 router.delete("/:id", deleteVendor);
+
+// Route to delete multiple vendors by ID
+router.delete("/",deleteMultipleVendors);
 
 export default router;
