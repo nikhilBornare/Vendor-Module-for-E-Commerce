@@ -40,13 +40,13 @@ export const getAllVendors = async (req: Request, res: Response, next: NextFunct
 // Get a vendor by ID
 export const getVendorById = async (req: Request, res: Response) => {
     try {
-        const brand = await Vendor.findById(req.params.id);
-        if (!brand) {
+        const vendor = await Vendor.findById(req.params.id);
+        if (!vendor) {
             res
                 .status(404)
                 .json({ success: false, message: "Vendor not found." });
         }
-        res.status(200).json({ success: true, data: brand });
+        res.status(200).json({ success: true, data: vendor });
     } catch (error: unknown) {
         if (error instanceof Error) {
             res.status(500).json({ success: false, message: error.message });
@@ -73,6 +73,25 @@ export const updateVendor = async (req: Request, res: Response, next: NextFuncti
     } catch (error: unknown) {
         if (error instanceof Error) {
             res.status(400).json({ success: false, message: error.message });
+        } else {
+            res.status(500).json({ success: false, message: "An unknown error occurred." });
+        }
+    }
+};
+// delete vendor by ID
+export const deleteVendor = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const vendor = await Vendor.findByIdAndDelete(req.params.id);
+        if (!vendor) {
+            res.status(404).json({ success: false, message: "Vendor not found." });
+        }
+        res.status(200).json({
+            success: true,
+            message: "Vendor deleted successfully.",
+        });
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            res.status(500).json({ success: false, message: error.message });
         } else {
             res.status(500).json({ success: false, message: "An unknown error occurred." });
         }
