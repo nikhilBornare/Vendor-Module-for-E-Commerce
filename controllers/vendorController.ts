@@ -36,3 +36,22 @@ export const getAllVendors = async (req: Request, res: Response, next: NextFunct
         }
     }
 };
+
+// Get a vendor by ID
+export const getVendorById = async (req: Request, res: Response) => {
+    try {
+      const brand = await Vendor.findById(req.params.id);
+      if (!brand) {
+        res
+          .status(404)
+          .json({ success: false, message: "Vendor not found." });
+      }
+      res.status(200).json({ success: true, data: brand });
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        res.status(500).json({ success: false, message: error.message });
+      } else {
+        res.status(500).json({ success: false, message: "An unknown error occurred." });
+      }
+    }
+  };
