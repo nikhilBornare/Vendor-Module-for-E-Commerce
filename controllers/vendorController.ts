@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import Vendor from "../models/vendorModel"
+import { ApplicationError } from "../error-handler/applicationError";
 
 // createVendor
 export const createVendor = async (req: Request, res: Response, next: NextFunction) => {
@@ -10,14 +11,10 @@ export const createVendor = async (req: Request, res: Response, next: NextFuncti
             data: vendor,
             message: "Vendor created successfully.",
         });
-    } catch (error: unknown) {
-        if (error instanceof Error) {
-            res.status(400).json({ success: false, message: error.message });
-        } else {
-            res.status(500).json({ success: false, message: "An unknown error occurred." });
-        }
-    }
-};
+    } catch (error: any) {
+        next(new ApplicationError((error as Error).message, 400));
+      }
+    };  
 
 // getAllVendors
 export const getAllVendors = async (req: Request, res: Response, next: NextFunction) => {
@@ -28,17 +25,13 @@ export const getAllVendors = async (req: Request, res: Response, next: NextFunct
             result: vendor.length,
             data: vendor,
         });
-    } catch (error: unknown) {
-        if (error instanceof Error) {
-            res.status(500).json({ success: false, message: error.message });
-        } else {
-            res.status(500).json({ success: false, message: "An unknown error occurred." });
-        }
-    }
-};
+    } catch (error: any) {
+        next(new ApplicationError((error as Error).message, 400));
+      }
+    };  
 
 // Get a vendor by ID
-export const getVendorById = async (req: Request, res: Response) => {
+export const getVendorById = async (req: Request, res: Response , next: NextFunction) => {
     try {
         const vendor = await Vendor.findById(req.params.id);
         if (!vendor) {
@@ -47,14 +40,10 @@ export const getVendorById = async (req: Request, res: Response) => {
                 .json({ success: false, message: "Vendor not found." });
         }
         res.status(200).json({ success: true, data: vendor });
-    } catch (error: unknown) {
-        if (error instanceof Error) {
-            res.status(500).json({ success: false, message: error.message });
-        } else {
-            res.status(500).json({ success: false, message: "An unknown error occurred." });
-        }
-    }
-};
+    } catch (error) {
+        next(new ApplicationError((error as Error).message, 400));
+      }
+    };  
 // Update Vendor by ID
 export const updateVendor = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -70,14 +59,10 @@ export const updateVendor = async (req: Request, res: Response, next: NextFuncti
             data: vendor,
             message: "Vendor updated successfully.",
         });
-    } catch (error: unknown) {
-        if (error instanceof Error) {
-            res.status(400).json({ success: false, message: error.message });
-        } else {
-            res.status(500).json({ success: false, message: "An unknown error occurred." });
-        }
-    }
-};
+    } catch (error) {
+        next(new ApplicationError((error as Error).message, 400));
+      }
+    };  
 // delete vendor by ID
 export const deleteVendor = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -89,11 +74,7 @@ export const deleteVendor = async (req: Request, res: Response, next: NextFuncti
             success: true,
             message: "Vendor deleted successfully.",
         });
-    } catch (error: unknown) {
-        if (error instanceof Error) {
-            res.status(500).json({ success: false, message: error.message });
-        } else {
-            res.status(500).json({ success: false, message: "An unknown error occurred." });
-        }
-    }
-};
+    } catch (error) {
+        next(new ApplicationError((error as Error).message, 500));
+      }
+    };

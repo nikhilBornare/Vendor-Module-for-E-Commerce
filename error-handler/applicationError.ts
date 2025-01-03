@@ -3,7 +3,7 @@ import { Request , Response , NextFunction } from "express";
 // Custom Error Class
 export class ApplicationError extends Error{
     statusCode: number;
-    details?:object[];
+    details?:object[];  //separate property to hold non-string error details
 
     constructor(message:string , statusCode: number , details?:object[]){
         super(message);
