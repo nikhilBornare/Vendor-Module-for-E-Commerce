@@ -10,6 +10,7 @@ import {
   updateMultipleVendors,
   updateVendor,
 } from "../controllers/vendorController";
+import { validateRequest, checkUniqueName } from "../middleware/validateRequest";
 
 const router = express.Router();
 
@@ -44,7 +45,7 @@ router.delete("/", deleteMultipleVendors);
 
 // Generic routes come after specific routes
 // Route to create a vendor
-router.post("/", createVendor);
+router.post("/", checkUniqueName,createVendor);
 
 // Route to get all vendors
 router.get("/", getAllVendors);
