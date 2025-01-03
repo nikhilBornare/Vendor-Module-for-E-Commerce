@@ -18,7 +18,7 @@ export interface IVendor extends Document {
 }
 
 // schema for vendor model
-const vendorSchema: Schema = new Schema(
+const VendorSchema: Schema = new Schema(
     {
         name: {
             type: String,
@@ -84,4 +84,6 @@ const vendorSchema: Schema = new Schema(
     }
 );
 
-export default mongoose.model<IVendor>("Vendor", vendorSchema);
+const vendorModel = mongoose.model<IVendor>("vendor", VendorSchema);
+
+export default vendorModel;
