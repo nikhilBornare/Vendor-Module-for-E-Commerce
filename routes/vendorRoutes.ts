@@ -1,5 +1,5 @@
 import express from "express";
-import { createMultipleVendors, createVendor, deleteMultipleVendors, deleteVendor, getAllVendors, getVendorById, updateVendor } from "../controllers/vendorController";
+import { createMultipleVendors, createVendor, deleteMultipleVendors, deleteVendor, getAllVendors, getVendorById, updateMultipleVendors, updateVendor } from "../controllers/vendorController";
 
 
 const router = express.Router();
@@ -20,7 +20,7 @@ router.get("/:id", getVendorById);
 router.put("/:id",updateVendor);
 
 // Route to update multiple Vendors 
-router.put("/bulk/")
+router.put("/bulk/", updateMultipleVendors);
 
 // Route to delete a vendor by ID
 router.delete("/:id", deleteVendor);
