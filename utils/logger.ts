@@ -1,5 +1,5 @@
 import { createLogger, format, transports } from 'winston';
-import DailyRotateFile from 'winston-daily-rotate-file';
+//import { File } from 'winston/lib/winston/transports'; 
 
 const { combine, timestamp, printf, errors, colorize } = format;
 
@@ -8,7 +8,7 @@ const customFormat = printf(({ level, message, timestamp, stack }) => {
     return `${timestamp} [${level.toUpperCase()}]: ${stack || message}`;
 });
 
-// Create Winston logger instance
+// Create Winston logger 
 const logger = createLogger({
     level: 'info', 
     format: combine(
@@ -22,23 +22,14 @@ const logger = createLogger({
             format: combine(colorize(), customFormat),
         }),
 
-        // Daily log rotation for application logs
-        new DailyRotateFile({
-            filename: 'logs/application-%DATE%.log',
-            datePattern: 'YYYY-MM-DD',
-            zippedArchive: true,
-            maxSize: '20m',
-          //  maxFiles: '14d',
+        // Application log file without rotation
+        new transports.File({
+            filename: 'logs/application.log', 
             level: 'info', 
         }),
 
-        // Error logs in a separate file
-        new DailyRotateFile({
-            filename: 'logs/error-%DATE%.log',
-            datePattern: 'YYYY-MM-DD',
-            zippedArchive: true,
-            maxSize: '20m',
-           // maxFiles: '14d',
+        new transports.File({
+            filename: 'logs/error.log', 
             level: 'error', 
         }),
     ],
