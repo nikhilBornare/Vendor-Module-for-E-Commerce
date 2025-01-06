@@ -1,0 +1,231 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+      "title": "Vendor Management API",
+      "description": "API documentation for managing vendors in the e-commerce platform",
+      "version": "1.0.0"
+    },
+    "servers": [
+      {
+        "url": "http://localhost:4000/api"
+      }
+    ],
+    "paths": {
+      "/vendors": {
+        "get": {
+          "summary": "Get all vendors",
+          "tags": ["Vendors"],
+          "responses": {
+            "200": {
+              "description": "A list of vendors",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "_id": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Invalid request"
+            }
+          }
+        }
+      },
+      "/vendors/{id}": {
+        "get": {
+          "summary": "Get a vendor by ID",
+          "tags": ["Vendors"],
+          "parameters": [
+            {
+              "in": "path",
+              "name": "id",
+              "required": true,
+              "description": "The vendor's ID",
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Vendor found"
+            },
+            "404": {
+              "description": "Vendor not found"
+            }
+          }
+        },
+        "put": {
+          "summary": "Update a vendor by ID",
+          "tags": ["Vendors"],
+          "parameters": [
+            {
+              "in": "path",
+              "name": "id",
+              "required": true,
+              "description": "The vendor's ID",
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Vendor updated"
+            },
+            "400": {
+              "description": "Invalid request"
+            },
+            "404": {
+              "description": "Vendor not found"
+            }
+          }
+        },
+        "delete": {
+          "summary": "Delete a vendor by ID",
+          "tags": ["Vendors"],
+          "parameters": [
+            {
+              "in": "path",
+              "name": "id",
+              "required": true,
+              "description": "The vendor's ID",
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Vendor deleted"
+            },
+            "404": {
+              "description": "Vendor not found"
+            }
+          }
+        }
+      },
+      "/vendors/bulk": {
+        "post": {
+          "summary": "Create multiple vendors",
+          "tags": ["Vendors"],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": {
+              "description": "Vendors created"
+            },
+            "400": {
+              "description": "Invalid request"
+            }
+          }
+        },
+        "put": {
+          "summary": "Update multiple vendors",
+          "tags": ["Vendors"],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "_id": {
+                        "type": "string"
+                      },
+                      "name": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Vendors updated"
+            },
+            "400": {
+              "description": "Invalid request"
+            }
+          }
+        },
+        "delete": {
+          "summary": "Delete multiple vendors",
+          "tags": ["Vendors"],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Vendors deleted"
+            },
+            "400": {
+              "description": "Invalid request"
+            }
+          }
+        }
+      }
+    }
+  }
+  

@@ -3,7 +3,7 @@ import { createLogger, format, transports } from 'winston';
 
 const { combine, timestamp, printf, errors, colorize } = format;
 
-// Define a custom format for logs
+// format for logs
 const customFormat = printf(({ level, message, timestamp, stack }) => {
     return `${timestamp} [${level.toUpperCase()}]: ${stack || message}`;
 });
@@ -22,7 +22,6 @@ const logger = createLogger({
             format: combine(colorize(), customFormat),
         }),
 
-        // Application log file without rotation
         new transports.File({
             filename: 'logs/application.log', 
             level: 'info', 

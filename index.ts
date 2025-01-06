@@ -4,12 +4,17 @@ import connectDB from './config/db';
 import vendorRoutes from "./routes/vendorRoutes";
 import {errorHandler} from "./error-handler/applicationError";
 import logger from './utils/logger';
+import swaggerUi from 'swagger-ui-express';
+import * as swaggerDocument from "./swagger.json";
 
 dotenv.config();
 const app = express();
 
 // Middleware
 app.use(express.json());
+
+// Serve Swagger API documentation
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // Connect to Database
 connectDB();
@@ -28,7 +33,7 @@ app.use("/api/vendors",vendorRoutes)
 
 // Default 404 route
 app.use((req,res)=>{
-  res.status(404).json({success:false,message:"API does not exist"});
+  res.status(404).json({success:false,message:"API not found. Please check our documentation for more information at http://localhost:4000/api-docs/"});
 });
 
 // Application-level error handling middleware
