@@ -14,11 +14,11 @@ const app = express();
 // Middleware
 app.use(express.json());
 
-// rate limiting to all requests
-app.use(apiLimiter);
-
 // Serve Swagger API documentation
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
+// rate limiting to all requests
+app.use(apiLimiter);
 
 // Connect to Database
 connectDB();
