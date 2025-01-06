@@ -6,12 +6,16 @@ import {errorHandler} from "./error-handler/applicationError";
 import logger from './utils/logger';
 import swaggerUi from 'swagger-ui-express';
 import * as swaggerDocument from "./swagger.json";
+import apiLimiter from './middleware/rateLimiter';
 
 dotenv.config();
 const app = express();
 
 // Middleware
 app.use(express.json());
+
+// rate limiting to all requests
+app.use(apiLimiter);
 
 // Serve Swagger API documentation
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
