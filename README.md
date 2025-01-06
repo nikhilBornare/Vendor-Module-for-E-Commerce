@@ -4,12 +4,50 @@ This project is a **Vendor Module** for an e-commerce platform, built using **Ty
 
 ## Features
 
-- Vendor management functionality (add/update/delete/view vendors).
-- Input validation with custom validation rules.
-- Middleware for request validation and rate limiting.
-- Centralized error handling.
-- Logger utility for debugging and tracking.
-- Swagger documentation for API endpoints.
+### CRUD Operations
+
+- Create, Read, Update, and Delete vendors.
+
+### Request Validation
+
+- Ensures incoming API requests meet predefined rules (e.g., required fields, types).
+
+### Sorting
+
+- Sort vendors alphabetically by their names.
+- Sort vendors by createdAt & updatedAt.
+
+### Filtering
+
+- Filter vendors based on their ratings or other attributes.
+
+### Pagination
+
+- Paginate vendor data to handle large lists efficiently.
+
+### Error Handling
+
+- Centralized error handling for cleaner and more manageable error responses.
+
+### Environment Configuration
+
+- Supports environment variables using .env files.
+
+### Database Integration
+
+- MongoDB is used as the database for managing vendor data.
+
+### Winston Logger
+
+- Integrated Winston for structured and efficient logging.
+
+### Swagger Documentation
+
+- Provides comprehensive API documentation using Swagger.
+
+### Rate Limiting
+
+- Implements rate limiting to prevent abuse and enhance API security.
 
 ## Project Structure
 
