@@ -41,7 +41,6 @@ router.put("/bulk", validateRequest,updateMultipleVendors);
 // Route to delete multiple vendors by ID
 router.delete("/", deleteMultipleVendors);
 
-// Generic routes come after specific routes
 // Route to create a vendor
 router.post("/", validateRequest,checkUniqueFields,createVendor);
 

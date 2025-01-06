@@ -19,6 +19,11 @@ app.get('/', (req: Request, res: Response) => {
 });
 app.use("/api/vendors",vendorRoutes)
 
+// Default 404 route
+app.use((req,res)=>{
+  res.status(404).json({success:false,message:"API does not exist"});
+});
+
 // Application-level error handling middleware
 app.use(errorHandler);
 
