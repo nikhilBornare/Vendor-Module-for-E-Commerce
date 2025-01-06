@@ -2,11 +2,13 @@ import { Request, Response, NextFunction } from "express";
 import Vendor from "../models/vendorModel"
 import { ApplicationError } from "../error-handler/applicationError";
 import getFilteredSortedPaginatedVendors from "../utils/features";
+import logger from "../utils/logger";
 
 // createVendor
 export const createVendor = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const vendor = await Vendor.create(req.body);
+        logger.info(`Vendor created: ${vendor.name}`);
         res.status(201).json({
             success: true,
             data: vendor,

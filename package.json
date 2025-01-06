@@ -15,7 +15,9 @@
     "express": "^4.21.2",
     "joi": "^17.13.3",
     "mongoose": "^8.9.3",
-    "typescript": "^5.7.2"
+    "typescript": "^5.7.2",
+    "winston": "^3.17.0",
+    "winston-daily-rotate-file": "^5.0.0"
   },
   "devDependencies": {
     "@types/express": "^5.0.0",

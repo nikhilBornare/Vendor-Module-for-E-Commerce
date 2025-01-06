@@ -1,8 +1,9 @@
-import express, { Request, Response } from 'express';
+import express, { Request, Response, NextFunction } from 'express';
 import dotenv from 'dotenv';
 import connectDB from './config/db';
 import vendorRoutes from "./routes/vendorRoutes";
 import {errorHandler} from "./error-handler/applicationError";
+import logger from './utils/logger';
 
 dotenv.config();
 const app = express();
@@ -12,6 +13,12 @@ app.use(express.json());
 
 // Connect to Database
 connectDB();
+
+// Middleware to log all incoming requests
+app.use((req: Request, res: Response, next: NextFunction) => {
+  logger.info(`[${req.method}] ${req.originalUrl}`);
+  next();
+});
 
 // Basic Route
 app.get('/', (req: Request, res: Response) => {
@@ -25,8 +32,16 @@ app.use((req,res)=>{
 });
 
 // Application-level error handling middleware
+// Error Handler
+app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+  logger.error(`Error: ${err.message}`);
+  next(err);
+});
+
 app.use(errorHandler);
 
 // Start the Server
 const PORT = process.env.PORT || 4000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(PORT, () => {
+  logger.info(`Server running on port ${PORT}`);
+});
