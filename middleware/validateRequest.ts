@@ -3,6 +3,7 @@ import Vendor from "../models/vendorModel";
 import { ApplicationError } from "../error-handler/applicationError";
 import { vendorSchema } from "../validation/vendorValidation";
 
+// validation middleware
 export const validateRequest = (req: Request, res: Response, next: NextFunction) => {
     const { error } = vendorSchema.validate(req.body, { abortEarly: false });
 
@@ -16,22 +17,37 @@ export const validateRequest = (req: Request, res: Response, next: NextFunction)
     next();
 };
 
-// Middleware for checking unique name
-export const checkUniqueName = async (req: Request, res: Response, next: NextFunction) => {
+// Middleware for checking unique name, email, and phone
+export const checkUniqueFields = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const { name } = req.body;
+        const { name, email, phone } = req.body;
         const id = req.params?.id;
 
         const existingVendor = await Vendor.findOne({
-            name: name,
+            $or: [{ name }, { email }, { phone }],
             _id: { $ne: id },
         });
 
+        const errors: object[] = [];
+
         if (existingVendor) {
-            return next(new ApplicationError("Name must be unique. This name is already in use.", 400));
+            if (existingVendor.name === name) {
+                errors.push({ field: "name", message: "Name must be unique. This name is already in use." });
+            }
+            if (existingVendor.email === email) {
+                errors.push({ field: "email", message: "Email already exists." });
+            }
+            if (existingVendor.phone === phone) {
+                errors.push({ field: "phone", message: "Phone number already exists." });
+            }
         }
+
+        if (errors.length > 0) {
+            return next(new ApplicationError("Duplicate field error", 400, errors));
+        }
+
         next();
     } catch (err) {
-        next(new ApplicationError("Internal server error during unique name validation", 500));
+        next(new ApplicationError("Internal server error during unique validation", 500));
     }
 };

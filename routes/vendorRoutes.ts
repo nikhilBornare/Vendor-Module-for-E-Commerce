@@ -10,7 +10,7 @@ import {
   updateMultipleVendors,
   updateVendor,
 } from "../controllers/vendorController";
-import { validateRequest, checkUniqueName } from "../middleware/validateRequest";
+import { validateRequest, checkUniqueFields } from "../middleware/validateRequest";
 
 const router = express.Router();
 
@@ -28,24 +28,22 @@ const validateObjectId = (
             message: "One or more IDs are invalid.",
         });
     }
-
-    // Call next() to pass control to the next middleware or route handler
     next();
 };
 
 
 // Route to create multiple vendors
-router.post("/bulk", createMultipleVendors);
+router.post("/bulk", validateRequest ,checkUniqueFields,createMultipleVendors);
 
 // Route to update multiple vendors
-router.put("/bulk", updateMultipleVendors);
+router.put("/bulk", validateRequest,updateMultipleVendors);
 
 // Route to delete multiple vendors by ID
 router.delete("/", deleteMultipleVendors);
 
 // Generic routes come after specific routes
 // Route to create a vendor
-router.post("/", checkUniqueName,createVendor);
+router.post("/", validateRequest,checkUniqueFields,createVendor);
 
 // Route to get all vendors
 router.get("/", getAllVendors);
@@ -54,7 +52,7 @@ router.get("/", getAllVendors);
 router.get("/:id" , validateObjectId,getVendorById);
 
 // Route to update a vendor by ID
-router.put("/:id", updateVendor);
+router.put("/:id", validateRequest,updateVendor);
 
 // Route to delete a vendor by ID
 router.delete("/:id", deleteVendor);

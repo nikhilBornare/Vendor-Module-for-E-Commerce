@@ -2,7 +2,7 @@ import express, { Request, Response } from 'express';
 import dotenv from 'dotenv';
 import connectDB from './config/db';
 import vendorRoutes from "./routes/vendorRoutes";
-
+import {errorHandler} from "./error-handler/applicationError";
 
 dotenv.config();
 const app = express();
@@ -18,6 +18,9 @@ app.get('/', (req: Request, res: Response) => {
   res.send('API is running...');
 });
 app.use("/api/vendors",vendorRoutes)
+
+// Application-level error handling middleware
+app.use(errorHandler);
 
 // Start the Server
 const PORT = process.env.PORT || 4000;
